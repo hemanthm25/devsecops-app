@@ -1,0 +1,59 @@
+name: DevSecOps CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  security-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install Backend Dependencies
+        run: |
+          cd src
+          npm install
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd public
+          npm install
+
+      - name: Run Static Analysis (SAST) with SonarQube
+        run: |
+          echo "Running SonarQube Scan..."
+          # Add actual SonarQube scan command here
+
+      - name: Run Dependency Scanning with Snyk
+        run: |
+          echo "Running Snyk Dependency Check..."
+          npm install -g snyk
+          snyk test
+
+      - name: Run Container Security Scan with Trivy
+        run: |
+          echo "Running Trivy Scan..."
+          docker pull aquasec/trivy
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image devsecops-backend:1.0
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image devsecops-frontend:1.0
+
+      - name: Build and Push Docker Images
+        run: |
+          echo "Building Docker Images..."
+          docker build -t devsecops-backend:1.0 -f src/Dockerfile .
+          docker build -t devsecops-frontend:1.0 -f public/Dockerfile .
+
+      - name: Deploy to Kubernetes (Minikube)
+        run: |
+          echo "Deploying to Kubernetes..."
+          kubectl apply -f k8s/backend-deployment.yaml
+          kubectl apply -f k8s/frontend-deployment.yaml
