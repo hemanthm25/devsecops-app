@@ -37,7 +37,9 @@ jobs:
         run: |
           echo "Running Snyk Dependency Check..."
           npm install -g snyk
+          snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test
+
 
       - name: Run Container Security Scan with Trivy
         run: |
