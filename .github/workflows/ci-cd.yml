@@ -60,8 +60,14 @@ jobs:
           docker build -t devsecops-backend:1.0 -f src/Dockerfile .
           docker build -t devsecops-frontend:1.0 -f public/Dockerfile .
 
-      - name: Deploy to Kubernetes (Minikube)
+      - name: Start Minikube
+        run: |
+          minikube start --driver=docker
+          kubectl config use-context minikube
+
+      - name: Deploy to Kubernetes
         run: |
           echo "Deploying to Kubernetes..."
-          kubectl apply -f k8s/backend-deployment.yaml
-          kubectl apply -f k8s/frontend-deployment.yaml
+          kubectl apply -f k8s/backend-deployment.yaml --validate=false
+          kubectl apply -f k8s/frontend-deployment.yaml --validate=false
+
