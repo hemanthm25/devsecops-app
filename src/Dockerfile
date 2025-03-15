@@ -1,7 +1,14 @@
 FROM node:16-alpine
 WORKDIR /app
-COPY src/package.json /app/
+
+# Copy package.json and package-lock.json first (for efficient Docker caching)
+COPY package.json /app/
+
+# Install dependencies
 RUN npm install
-COPY src /app
+
+# Copy all source files
+COPY . /app/
+
 EXPOSE 5000
 CMD ["node", "app.js"]
