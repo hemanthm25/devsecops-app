@@ -3,9 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevSecOps Frontend</title>
+    <title>DevSecOps Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #000000, #00FFFF);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .metrics, .logs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: #0A0A0A;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px #00FFFF;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        button {
+            background: #00FFFF;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #008B8B;
+        }
+        canvas {
+            max-width: 100%;
+        }
+        .logs {
+            padding: 20px;
+            background: #0A0A0A;
+            border-radius: 8px;
+            box-shadow: 0 0 15px #00FFFF;
+            color: #00FFFF;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Frontend is Running!</h1>
+<div class="container">
+    <h1>DevSecOps Dashboard</h1>
+    <div class="metrics">
+        <div class="card">
+            <h2>Vulnerabilities</h2>
+            <p id="vulnCount">0</p>
+        </div>
+        <div class="card">
+            <h2>Scans Performed</h2>
+            <p id="scanCount">0</p>
+        </div>
+        <div class="card">
+            <h2>Alerts</h2>
+            <p id="alertCount">0</p>
+        </div>
+    </div>
+
+    <div>
+        <button onclick="runScan()">Run Security Scan</button>
+    </div>
+
+    <h2>Security Heatmap</h2>
+    <canvas id="securityChart"></canvas>
+    
+    <h2>Logs</h2>
+    <div class="logs" id="logOutput">No logs yet...</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Sample Data (Dynamic data should be fetched from backend)
+    const chartData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        datasets: [{
+            label: 'Vulnerabilities Over Time',
+            data: [10, 20, 15, 25, 30],
+            backgroundColor: 'rgba(0, 255, 255, 0.4)',
+            borderColor: '#00FFFF',
+            borderWidth: 2,
+        }]
+    };
+
+    const ctx = document.getElementById('securityChart').getContext('2d');
+    const securityChart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { color: '#ffffff' }
+                }
+            },
+            scales: {
+                x: { ticks: { color: '#ffffff' } },
+                y: { ticks: { color: '#ffffff' } }
+            }
+        }
+    });
+
+    // Simulate Scan
+    function runScan() {
+        document.getElementById('logOutput').innerText = 'Running Scan...';
+        setTimeout(() => {
+            document.getElementById('vulnCount').innerText = Math.floor(Math.random() * 100);
+            document.getElementById('scanCount').innerText++;
+            document.getElementById('alertCount').innerText = Math.floor(Math.random() * 10);
+            document.getElementById('logOutput').innerText += '\nScan Completed!';
+        }, 2000);
+    }
+</script>
 </body>
 </html>

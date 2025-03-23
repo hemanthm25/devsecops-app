@@ -1,14 +1,18 @@
+# Use Node.js Alpine image
 FROM node:16-alpine
+
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first (for efficient Docker caching)
+# Copy package.json and install dependencies
 COPY package.json /app/
-
-# Install dependencies
 RUN npm install
 
-# Copy all source files
-COPY . /app/
+# Copy the entire src folder to the container
+COPY . /app
 
+# Expose the port
 EXPOSE 5000
-CMD ["node", "app.js"]
+
+# Start the application with the correct path to app.js
+CMD ["node", "/app/src/app.js"]
