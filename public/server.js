@@ -1,16 +1,11 @@
-const express = require("express");
-const path = require("path");
+const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
-// Serve static files from the public directory
-app.use(express.static(path.join(__dirname)));
-
-// Default route
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+app.get('/', (req, res) => {
+  res.send('Frontend running on port 3000');
 });
 
 app.listen(PORT, () => {
-  console.log(`Frontend running on port ${PORT}`);
+  console.log(`Frontend server started on port ${PORT}`);
 });

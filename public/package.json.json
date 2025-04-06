@@ -1,9 +1,8 @@
 {
-  "name": "frontend",
+  "name": "devsecops-frontend",
   "version": "1.0.0",
-  "description": "DevSecOps Frontend",
   "scripts": {
-    "start": "node server.js"
+    "start": "node js/app.js"
   },
   "dependencies": {
     "express": "^4.18.2"

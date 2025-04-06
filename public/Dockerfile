@@ -1,7 +1,17 @@
-FROM node:16-alpine
+# Use Node.js base image
+FROM node:18
+
+# Set working directory
 WORKDIR /app
-COPY public/package.json /app/
+
+# Copy all files
+COPY . .
+
+# Install dependencies
 RUN npm install
-COPY public /app
+
+# Expose port 3000 for frontend
 EXPOSE 3000
+
+# Run the app
 CMD ["npm", "start"]
