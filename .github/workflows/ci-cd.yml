@@ -44,7 +44,7 @@ jobs:
       - name: Build Docker Image for Trivy Scan
         run: |
           docker build -t devsecops-backend:1.0 -f src/Dockerfile .
-          docker build -t devsecops-frontend:1.0 -f public/Dockerfile .
+          docker build -t devsecops-frontend:1.0 -f Dockerfile .
 
       - name: Run Container Security Scan with Trivy
         run: |
@@ -58,7 +58,7 @@ jobs:
         run: |
           echo "Building Docker Images..."
           docker build -t devsecops-backend:1.0 -f src/Dockerfile .
-          docker build -t devsecops-frontend:1.0 -f public/Dockerfile .
+          docker build -t devsecops-frontend:1.0 -f Dockerfile .
 
       - name: Start Minikube
         run: |
