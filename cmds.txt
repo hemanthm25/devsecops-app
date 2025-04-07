@@ -1,24 +1,53 @@
 cd devsecops-app
-
 docker info
-
 minikube start --driver=docker
-
 minikube status
 
 
+
 docker stop backend
-
-docker rm -f backend
-
-docker build -t devsecops-backend:1.0 .
-
+docker rm backend
+docker build -t devsecops-backend:1.0 .  -f src/Dockerfile
 docker images
-
 docker run -d -p 5000:5000 --name backend devsecops-backend:1.0
-
 docker logs backend
-
 curl http://localhost:5000
 
 
+
+docker stop frontend
+docker rm frontend
+docker build -t devsecops-frontend:1.0 .
+docker images
+docker run -d -p 3000:3000 --name frontend devsecops-frontend:1.0
+docker logs frontend
+curl http://localhost:3000
+
+
+
+kubectl apply -f k8s/backend-deployement.yaml
+kubectl apply -f k8s/backend-service.yaml
+kubectl apply -f k8s/frontend-deployement.yaml
+kubectl apply -f k8s/frontend-service.yaml
+kubectl get pods
+kubectl get svc
+
+
+
+git add .
+git commit -m "Final Deployment with CI/CD Pipeline"
+git push origin main
+
+
+
+snyk test --all-projects
+snyk monitor
+
+
+trivy image devsecops-backend:1.0
+trivy image devsecops-frontend:1.0
+
+
+
+https://localhost:5000
+https://localhost:3000
